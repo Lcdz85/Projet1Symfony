@@ -4,11 +4,12 @@ namespace App\Controller;
 
 // classe de laquelle on doit hériter pour que notre classe soit un controller
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 // classe pour créer une Réponse à envoyer au client
 use Symfony\Component\HttpFoundation\Response;
 // classe qui nous permet de créer de routes
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Annotation\Route; 
+// pour pouvoir obtenir les paramètres de l'url
+use Symfony\Component\HttpFoundation\Request;
 
 
 class ExemplesRoutingController extends AbstractController
@@ -56,4 +57,25 @@ class ExemplesRoutingController extends AbstractController
 
         return new Response("La moyenne est : " . $moyenne);
     }
+
+        // avec paramètres:
+    #[Route('/exemples/routing/afficher/nom/{prenom}/{nom}')]
+    public function afficherNom(Request $request)
+    {
+        $prenom = $request->get('prenom');
+        $nom = $request->get('nom');
+
+        return new Response("Je m'appelle ". $prenom." ". $nom. " et je suis une WAD");
+    }
+
+        // contrainte ds les paramètres:
+    #[Route('/exemples/routing/afficher/ville/{ville}',requirements:['ville'=>'\w{1,15}'])]
+    // ou #[Route('/exemples/routing/afficher/ville/{ville<\w{1,15}>')]
+    public function afficheVille(Request $request)
+    {
+        $ville = $request->get('ville');
+
+        return new Response("Le nom de la ville est ". $ville);
+    }
+
 }
